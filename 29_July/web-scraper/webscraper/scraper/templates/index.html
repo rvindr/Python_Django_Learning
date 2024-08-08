@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        {% for item in news %}
+            <div class="col-3">
+                <div class="card my-3 shadow" style="width: 18rem;">
+                    <img src="{{item.img}}" class="card-img-top" height="200px" alt="...">
+                    <div class="card-body">
+                      <h5 class="card-title">{{item.title}}</h5>
+                      <p class="card-text">{{item.desc |truncatechars:99}}..</p>
+                      <div class="text-center ">
+                      <a href="{{item.external_link}}" class="btn btn-primary ">Read More</a>
+                    </div>
+                    </div>
+                  </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock content %}
+

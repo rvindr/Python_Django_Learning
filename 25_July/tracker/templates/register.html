@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <form class="container col-4 d-grid gap-2 p-2 border rounded shadow-lg" action="" method="post">
+    {% csrf_token %}
+    {% if messages %}
+    {{ message.tags }}
+    <div class="alert alert-primary" role="alert">
+      {% for message in messages %}
+      {{ message }}
+      {% endfor %}
+    </div>
+    {% endif %}
+    <div class="row">
+      <div class="col">
+        <label for="first_name" class="form-label">First Name</label>
+        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First name" aria-label="First name" />
+      </div>
+      <div class="col">
+        <label for="last_name" class="form-label">Last Name</label>
+
+        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last name" aria-label="Last name" />
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input type="text" class="form-control" name="username" placeholder="Your username" id="username" aria-describedby="emailHelp" />
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Email address</label>
+      <input type="email" class="form-control" name="email" placeholder="Your email address" id="exampleInputEmail1" aria-describedby="emailHelp" />
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Password</label>
+      <input type="password" class="form-control" name="password" placeholder="Your password" id="exampleInputPassword1" />
+    </div>
+    <p>
+      Already have an account <a href="/login/">Login</a>
+    </p>
+    <button type="submit" class="btn btn-primary">Sign up</button>
+  </form>
+{% endblock %}

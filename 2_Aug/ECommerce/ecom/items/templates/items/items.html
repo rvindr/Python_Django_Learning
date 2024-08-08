@@ -1,0 +1,55 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+  Items
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-2">
+      <div class="container">
+        <form action="{% url 'item:items' %}" method="get" class="m-2">
+          <input name="query" class="form-control" type="text" value="{{ query }}" placeholder="Find a bike, a chair or car" />
+
+          <button class="btn btn-primary my-1" type="submit">Search</button>
+        </form>
+
+        <hr class="my-4" />
+        <p class="font-weight-bold">Categories</p>
+        <ul class="list-unstyled">
+          {% for category in categories %}
+            <li class="{% if category.id == category_id %}bg-light shadow rounded-1{% endif %}">
+              <a class="text-reset text-decoration-none p-2" href="{% url 'item:items' %}?query={{ query }}&category={{ category.id }}">{{ category }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+
+        <hr class="my-4" />
+        <p class="font-weight-bold">Clear Filters</p>
+        <ul class="list-unstyled">
+
+            <li>
+              <a class="text-reset text-decoration-none p-2 btn btn-warning" href="{% url 'item:items' %}">Clear</a>
+            </li>
+
+        </ul>
+      </div>
+    </div>
+    <div class="col-10">
+      <div class="row justify-content-evenly">
+        {% for item in items %}
+          <div class="col-4 my-2">
+            <div class="card shadow" style="width: 18rem;">
+              <img src="{{ item.image.url }}" class="card-img-top" width="100" height="200" alt="..." />
+              <div class="card-body">
+                <h5 class="card-title">{{ item.name }}</h5>
+                <p class="card-text">Price: {{ item.price }}</p>
+                <a href="{% url 'item:detail' item.id %}" class="btn btn-primary">Know more</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,30 @@
+db_table -> used to change table name in databse, home_brand -> brand
+ordering
+verbose_name 
+verbose_name_plural 
+unique_together 
+index_together 
+abstract 
+permissions
+constraints = [ # import krna pdta hai
+    CheckConstraint(check=Q(age_gte=18), name='age_gte_18')
+proxy = True
+
+
+class Person(models.Model):
+    person_name = models.CharField(max_length=100)
+    skill = models.ManyToManyField(Skills)
+    
+    class Meta:
+        db_table = 'person' -> home_person -> person
+        ordering = ('price) -> sort by view -> use - sign for decreasing order
+        verbose_name = 'Person'
+        verbose_name_plural ="Person" -> 
+
+class Brand(models.Model):
+    brand_name = models.CharField(max_length=100)
+    country = models.CharField(default='IN', max_length=100)
+
+    class Meta:
+        unique_together = ('brand_name','country') -> only save unique data by country or brand name
+        index_together  = ('brand_name','country')

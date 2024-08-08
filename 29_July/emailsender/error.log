@@ -1,0 +1,73 @@
+This is a error msg
+This is a critical msg
+This is a error msg
+This is a critical msg
+This is a error msg
+This is a critical msg
+This is a error msg
+This is a critical msg
+This is a error msg
+This is a critical msg
+This is a error msg
+This is a critical msg
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/sender/views.py", line 29, in index
+    user_obj.save()
+AttributeError: 'QuerySet' object has no attribute 'save'
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/sender/views.py", line 29, in index
+    user_obj.save()
+AttributeError: 'QuerySet' object has no attribute 'save'
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/sender/views.py", line 29, in index
+    user_obj.save()
+AttributeError: 'QuerySet' object has no attribute 'save'
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/sender/views.py", line 29, in index
+    user_obj.save()
+AttributeError: 'QuerySet' object has no attribute 'save'
+Internal Server Error: /check-otp/
+Traceback (most recent call last):
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/sender/views.py", line 40, in check_otp
+    return render('check-otp.html')
+TypeError: render() missing 1 required positional argument: 'template_name'
+Internal Server Error: /check-otp/{user_obj.id}/
+Traceback (most recent call last):
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+TypeError: check_otp() got an unexpected keyword argument 'id'
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/env/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/env/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/ravinderverma/Desktop/janbask/29_July/emailsender/sender/views.py", line 33, in index
+    return redirect(f'/check-otp/{user_obj.id}/')
+AttributeError: 'QuerySet' object has no attribute 'id'

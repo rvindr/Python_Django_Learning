@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <form class="container col-4 d-grid gap-2 p-2 border rounded shadow-lg" method="post">
+    {% csrf_token %}
+    {% if messages %}
+    {{ message.tags }}
+    <div class="alert alert-primary" role="alert">
+      {% for message in messages %}
+      {{ message }}
+      {% endfor %}
+    </div>
+    {% endif %}
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input type="text" class="form-control" placeholder="Your Username" name="username" id="username" aria-describedby="emailHelp" />
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Password</label>
+      <input type="password" class="form-control" name="password" placeholder="Your password" id="exampleInputPassword1" />
+    </div>
+    <p>
+      Already have an account <a href="/register/">Register</a>
+    </p>
+    <button type="submit" class="btn btn-primary">Login</button>
+  </form>
+{% endblock %}
