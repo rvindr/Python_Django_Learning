@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock title %}
+
+{% block content %}
+<div class="container">
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="username" class="form-label">username</label>
+          <input type="text" class="form-control" name = "username" id="username">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input type="password" class="form-control" name ="password" id="exampleInputPassword1">
+        </div>
+       
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+
+</div>
+<div class="container">
+    {% if data %}
+        {{data}}
+    {% endif %}
+</div>
+
+{% endblock content %}
