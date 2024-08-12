@@ -13,47 +13,49 @@ def home(request):
     return render(request, 'home.html')
 
 
-def login(request):
 
-    if request.method == "POST":
+
+class LoginAPI():
+
+    def __init__(self, data) -> None:
+        self.data = data
+
+    def post(self):
 
         try:
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            data = {
+
+            serializer = LoginSerializer(data=self.data)
+
+            if not serializer.is_valid():
+                return Response({
+                    'status':False,
+                    'message':serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            response = serializer.get_jwt_token(serializer.data)
+
+            return response
+        
+        except Exception as e:
+            return Response({
+                'status':False,
+                'message':'something went wrong',
+                
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        data = {
                  "username" : username,
                  "password" : password
             }
-            print(data)
-
-            serializer = LoginSerializer(data=data)
-
-            if not serializer.is_valid():
-                    print('inside the not valid')
-                    res = Response({
-                        'status':False,
-                        'message':serializer.errors
-                    }, status=status.HTTP_400_BAD_REQUEST)
-
-                    return render(request, 'login.html', context={
-                         'data' :res
-                    })
-
-
-            response = serializer.get_jwt_token(serializer.data)
-
-            return render(request, 'login.html', context={
-                            'data' :response
-                        })
-        except Exception as e:
-                res =  Response({
-                    'status':False,
-                    'message':'something went wrong',
-                    
-                }, status=status.HTTP_400_BAD_REQUEST)
-                return render(request, 'login.html', context={
-                         'data' :res
-                    })
         
+        res = LoginAPI(data)
+    
+        return render(request, 'login.html',context={
+            'data':res.post()
+        })
+
     return render(request, 'login.html')
-        

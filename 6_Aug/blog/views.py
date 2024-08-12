@@ -17,24 +17,26 @@ class PublicView(APIView):
 
             if request.GET.get('search'):
                 search = request.GET.get('search')
-                blogs = blogs.filter(Q(title__icontains = search)| Q(blog_text__icontains = search))
-            page_number = request.GET.get('page',1)
+                blogs = blogs.filter(Q(title__icontains=search) | Q(blog_text__icontains=search))
+                
+            page_number = int(request.GET.get('page', 1))
             paginator = Paginator(blogs, 2)
+            total_pages = paginator.num_pages
 
             serializer = BlogSerializer(paginator.page(page_number), many=True)
 
             return Response({
                 'data': serializer.data,
-                'message' : 'blog fetch successfully'
+                'message': 'Blog fetch successfully',
+                'total_pages': total_pages,
+                'current_page': page_number
             }, status=status.HTTP_200_OK)
         except Exception as e:
-
-                    return Response({
-                            'status':False,
-                            'message':'something went wrong or invalid page',
-                            'data':{}
-                        }, status=status.HTTP_400_BAD_REQUEST)
-
+            return Response({
+                'status': False,
+                'message': 'Something went wrong or invalid page',
+                'data': {}
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 class BlogAPI(APIView):
     permission_classes = [IsAuthenticated]

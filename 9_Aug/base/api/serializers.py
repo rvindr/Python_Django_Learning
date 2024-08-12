@@ -4,6 +4,12 @@ from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
+from rest_framework import serializers
+from django.contrib.auth.models import User
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
+
+
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
@@ -32,4 +38,3 @@ class LoginSerializer(serializers.Serializer):
                 'access': str(refresh.access_token),
             }
         }
- 
