@@ -1,0 +1,12 @@
+## Django Rest Framework
+ - Classview in urls.py
+   - path('root/', className.as_view())
+- serializer.ModelSerializer
+- serializer.Serializer
+- validate and create method in serializer
+- Login/Register using serializer.Serializer
+- @api_view()
+- GET, POST, PUT,PATCH, DELETE
+- APIView Class
+- permission and authentication class
+- ModelViewset
