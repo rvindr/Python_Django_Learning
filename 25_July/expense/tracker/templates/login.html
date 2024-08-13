@@ -1,10 +1,16 @@
-{% extends 'frontend/base.html' %}
-{% load static %}
+{% extends 'base.html' %}
 
 {% block content %}
-  <form  id = "login-form" class="container col-sm-6 col-md-4  d-grid gap-2 p-2 border rounded shadow-lg" method="post">
+  <form class="container col-4 d-grid gap-2 p-2 border rounded shadow-lg" method="post">
     {% csrf_token %}
-
+    {% if messages %}
+    {{ message.tags }}
+    <div class="alert alert-primary" role="alert">
+      {% for message in messages %}
+      {{ message }}
+      {% endfor %}
+    </div>
+    {% endif %}
     <div class="mb-3">
       <label for="username" class="form-label">Username</label>
       <input type="text" class="form-control" placeholder="Your Username" name="username" id="username" aria-describedby="emailHelp" />
@@ -18,8 +24,4 @@
     </p>
     <button type="submit" class="btn btn-primary">Login</button>
   </form>
-  <!-- Blog Content -->
-  <div id="blog-container" class="row g-4 g-lg-6">
-    <!-- Blog posts will be dynamically loaded here -->
-  </div>
 {% endblock %}

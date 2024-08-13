@@ -1,8 +1,16 @@
-{% extends 'frontend/base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
-  <form  id="register-form" class="container col-sm-6 col-md-4 d-grid gap-2 p-2 border rounded shadow-lg" action="" method="post">
+  <form class="container col-4 d-grid gap-2 p-2 border rounded shadow-lg" action="" method="post">
     {% csrf_token %}
+    {% if messages %}
+    {{ message.tags }}
+    <div class="alert alert-primary" role="alert">
+      {% for message in messages %}
+      {{ message }}
+      {% endfor %}
+    </div>
+    {% endif %}
     <div class="row">
       <div class="col">
         <label for="first_name" class="form-label">First Name</label>
@@ -31,6 +39,4 @@
     </p>
     <button type="submit" class="btn btn-primary">Sign up</button>
   </form>
-  <div id="register-msg"></div>
-  
 {% endblock %}

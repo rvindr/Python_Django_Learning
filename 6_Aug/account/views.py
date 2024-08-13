@@ -23,7 +23,8 @@ class RegisterAPI(APIView):
 
         return Response({
                 'staus':True,
-                'message':'user created successfully'
+                'message':'user created successfully',
+
             }, status=status.HTTP_201_CREATED)
     
 

@@ -1,11 +1,13 @@
 
 from django.urls import path
 from frontend import views
+app_name = "frontend"
 
 urlpatterns = [
-    path('', views.blog),
-    path('temp/', views.temp),
-    # path('register/', views.register, name='register')
+    path('', views.blog, name="index"),
+    path('login/', views.loginForm),
+    path('client-blog/', views.client_blog),
+    path('register/', views.registerForm, name='register')
 
 
 ]
