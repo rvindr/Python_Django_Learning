@@ -14,7 +14,7 @@ from account.serializers import (
 )
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from account.customJWTAuthentication import CustomJWTAuthentication
-from account.permission import IsAdminPermission, HasPermission
+from account.permission import IsAdminPermission, check_permission
 from account.mongo_client import roles_collection, permissions_collection
 from account.serializers import UserSerializer  # UserCreateSerializer
 from django.contrib.auth.hashers import make_password, check_password
@@ -326,14 +326,25 @@ class UserRoleAssignmentView(APIView):
 
 
 class SomeView(APIView):
-    permission_classes = [IsAuthenticated, HasPermission.require("manage roles")]
+    permission_classes = [IsAuthenticated]
 
+    @check_permission("read")
     def get(self, request):
         return Response({"message": "GET access granted"})
 
+    @check_permission("write")
+    def post(self, request):
+        return Response({"message": "POST access granted"})
+
+    @check_permission("update")
     def put(self, request):
         return Response({"message": "PUT access granted"})
 
+    @check_permission("update")
+    def patch(self, request):
+        return Response({"message": "PATCH access granted"})
+
+    @check_permission("delete")
     def delete(self, request):
         return Response({"message": "DELETE access granted"})
 

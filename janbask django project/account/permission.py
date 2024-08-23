@@ -9,11 +9,10 @@ class IsAdminPermission(BasePermission):
         user = request.user
         return user.is_authenticated and user.is_admin
 
+from rest_framework.permissions import BasePermission
+from account.mongo_client import roles_collection
 
-class HasPermission(BasePermission):
-    def __init__(self, required_permission=None):
-        self.required_permission = required_permission
-
+class HasReadPermission(BasePermission):
     def has_permission(self, request, view):
         user = request.user
         if not user.is_authenticated:
@@ -23,20 +22,81 @@ class HasPermission(BasePermission):
         if not role_id:
             return False
 
-        try:
-            role = roles_collection.find_one({"_id": role_id})
-        except Exception as e:
-
-            return False
-
+        role = roles_collection.find_one({"_id": role_id})
         if not role:
             return False
 
-        if self.required_permission in role.get("permissions", []):
-            return True
+        return "read" in role.get("permissions", [])
 
-        return False
+class HasCreatePermission(BasePermission):
+    def has_permission(self, request, view):
+        user = request.user
+        if not user.is_authenticated:
+            return False
 
-    @classmethod
-    def require(cls, permission):
-        return lambda: cls(permission)
+        role_id = user.role_id
+        if not role_id:
+            return False
+
+        role = roles_collection.find_one({"_id": role_id})
+        if not role:
+            return False
+
+        return "create" in role.get("permissions", [])
+
+class HasUpdatePermission(BasePermission):
+    def has_permission(self, request, view):
+        user = request.user
+        if not user.is_authenticated:
+            return False
+
+        role_id = user.role_id
+        if not role_id:
+            return False
+
+        role = roles_collection.find_one({"_id": role_id})
+        if not role:
+            return False
+
+        return "update" in role.get("permissions", [])
+
+class HasDeletePermission(BasePermission):
+    def has_permission(self, request, view):
+        user = request.user
+        if not user.is_authenticated:
+            return False
+
+        role_id = user.role_id
+        if not role_id:
+            return False
+
+        role = roles_collection.find_one({"_id": role_id})
+        if not role:
+            return False
+
+        return "delete" in role.get("permissions", [])
+
+
+from functools import wraps
+from rest_framework.exceptions import PermissionDenied
+
+def check_permission(permission):
+    def decorator(func):
+        @wraps(func)
+        def wrapped(self, request, *args, **kwargs):
+            user = request.user
+            if not user.is_authenticated:
+                raise PermissionDenied("User is not authenticated")
+
+            role_id = user.role_id
+            if not role_id:
+                raise PermissionDenied("User does not have a role assigned")
+
+            role = roles_collection.find_one({"_id": role_id})
+            if not role or permission not in role.get("permissions", []):
+                raise PermissionDenied(f"You don't have permission to '{permission}', Permission is required!")
+
+            return func(self, request, *args, **kwargs)
+        return wrapped
+    return decorator
+
