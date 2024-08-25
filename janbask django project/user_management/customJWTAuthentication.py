@@ -3,7 +3,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import InvalidToken
 from rest_framework.exceptions import AuthenticationFailed
 from account.models import UserModel
-from account.mongo_client import users_collection, token_collection
+from user_management.mongo_client import users_collection, token_collection
+
 
 
 class CustomJWTAuthentication(JWTAuthentication):
@@ -58,3 +59,4 @@ class CustomJWTAuthentication(JWTAuthentication):
         request.user = None
 
         return {"message": "Successfully logged out"}
+    

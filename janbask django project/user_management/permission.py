@@ -1,5 +1,5 @@
 from rest_framework.permissions import BasePermission
-from account.mongo_client import roles_collection
+from user_management.mongo_client import roles_collection
 import logging
 
 
@@ -10,7 +10,7 @@ class IsAdminPermission(BasePermission):
         return user.is_authenticated and user.is_admin
 
 from rest_framework.permissions import BasePermission
-from account.mongo_client import roles_collection
+from user_management.mongo_client import roles_collection
 
 class HasReadPermission(BasePermission):
     def has_permission(self, request, view):

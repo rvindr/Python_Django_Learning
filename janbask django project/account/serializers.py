@@ -1,22 +1,21 @@
 from django.conf import settings
 from datetime import timedelta, datetime
 from rest_framework import serializers
-from account.mongo_client import (
+from user_management.mongo_client import (
     users_collection,
     token_collection,
     roles_collection,
-    permissions_collection,
 )
 from django.contrib.auth.hashers import make_password, check_password
-from account.models import UserModel, RoleModel, PermissionModel
+from account.models import UserModel
 from rest_framework.exceptions import AuthenticationFailed
 from bson import ObjectId
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.exceptions import ValidationError
 import jwt
 from account.utils import Util  # to send mail
-from django.utils.encoding import smart_str, force_bytes, DjangoUnicodeDecodeError
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import smart_str, force_bytes
+from django.utils.http import urlsafe_base64_encode
 
 
 class RegistrationSerializer(serializers.Serializer):
@@ -60,9 +59,9 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def get_user_from_mongodb(self, email: str) -> UserModel:
-        # print(f"Querying user with email: {email}")
+
         user_data = users_collection.find_one({"email": email})
-        # print(f"User data retrieved: {user_data}")
+
         if user_data:
             user_data["_id"] = str(user_data.get("_id"))
             return UserModel(**user_data)
@@ -78,17 +77,17 @@ class LoginSerializer(serializers.Serializer):
 
         try:
             user = self.get_user_from_mongodb(email)
-            # print(f"User object created: {user}")
+
         except ValueError as e:
             print(f"Error during user retrieval: {e}")
             raise AuthenticationFailed("No user found")
 
         if user.is_locked_out():
-            # print("User is locked out")
+
             raise AuthenticationFailed("Account is locked. Please try again later.")
 
         if not check_password(password, user.password):
-            # print("Password check failed")
+
             user.increment_failed_attempts()
             raise AuthenticationFailed("Incorrect password")
 
@@ -100,7 +99,6 @@ class LoginSerializer(serializers.Serializer):
 
         refresh_token = RefreshToken.for_user(user)
         access_token = refresh_token.access_token
-        # print("Login successful, tokens generated")
 
         return {
             "refresh_token": str(refresh_token),
@@ -135,9 +133,7 @@ class ChangePasswordSerializer(serializers.Serializer):
 
     def save(self, **kwargs):
         user = self.context.get("user")
-        user_id = user.id  # ObjectId(user.id)
-        # print('user id',user.id)
-        # print('user_id',user_id)
+        user_id = user.id
         new_password = self.validated_data["new_password"]
 
         # Hash the new password
@@ -188,7 +184,7 @@ class PasswordResetEmailSerializer(serializers.Serializer):
         reset_url = f"{settings.FRONTEND_URL}/reset-password/{encoded_uid}/{token}/"
         print(reset_url)
         print(user_data["email"])
-        # # Send email
+        # Send email
         data = {
             "subject": "Reset Your Password",
             "body": f"Click following Link to reset your password \n {reset_url}",
@@ -219,12 +215,6 @@ class PasswordResetSerializer(serializers.Serializer):
         # Verify the uid matches the user_id from the token
         if uid != urlsafe_base64_encode(force_bytes(user_id)):
             raise ValidationError("Invalid UID or Token")
-
-        # Fetch the user by ID from MongoDB
-        # try:
-        #     object_id = ObjectId(user_id)
-        # except Exception as e:
-        #     raise ValidationError('Invalid user ID format')
 
         user_data = users_collection.find_one({"_id": user_id})
         if not user_data:
@@ -273,47 +263,5 @@ class UserSerializer(serializers.Serializer):
             update_data["password"] = make_password(validated_data["password"])
 
         user_id = instance.get("id")
-        # users_collection.update_one({"_id": user_id}, {"$set": update_data})
+
         return validated_data
-
-
-# ---------------------Role and permission-------
-
-
-class PermissionSerializer(serializers.Serializer):
-    id = serializers.CharField(read_only=True, source="_id")
-    name = serializers.CharField(max_length=255)
-    description = serializers.CharField(max_length=255, required=False)
-
-    def create(self, validated_data):
-        permission = PermissionModel(**validated_data)
-        res = permissions_collection.insert_one(permission.dict(by_alias=True))
-        validated_data["_id"] = str(res.inserted_id)
-        return validated_data
-
-
-class RoleSerializer(serializers.Serializer):
-    id = serializers.CharField(read_only=True, source="_id")
-    name = serializers.CharField(max_length=255)
-    permissions = serializers.ListField(child=serializers.CharField(max_length=255))
-
-    def create(self, validated_data):
-        role = RoleModel(**validated_data)
-        res = roles_collection.insert_one(role.dict(by_alias=True))
-        validated_data["_id"] = str(res.inserted_id)
-        return validated_data
-
-    # def update(self, instance, validated_data):
-    #     roles_collection.update_one({"_id": instance.id}, {"$set": validated_data})
-    #     return instance
-
-
-class UserRoleAssignmentSerializer(serializers.Serializer):
-    role_id = serializers.CharField()
-
-    def validate_role_id(self, role_id):
-
-        if not roles_collection.find_one({"_id": role_id}):
-            raise serializers.ValidationError("Role ID does not exist")
-
-        return role_id

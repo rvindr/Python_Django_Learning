@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.hashers import make_password
-from account.mongo_client import users_collection
+from user_management.mongo_client import users_collection
 from account.models import UserModel
 from bson import ObjectId
 from getpass import getpass
