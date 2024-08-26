@@ -6,7 +6,8 @@ from admin_account.views import (
     AdminUserManagementView,
     UserRoleAssignmentView,
     SomeView,
-    AdminLoginView,AdminUserLogView
+    AdminLoginView,
+    AdminUserLogView,
 )
 
 urlpatterns = [
@@ -22,7 +23,6 @@ urlpatterns = [
         "users/<str:user_id>/",
         AdminUserManagementView.as_view(),
         name="admin-user-detail",
-
     ),
     path("roles/", RoleManagementView.as_view(), name="role-management"),
     path("roles/<str:role_id>/", RoleManagementView.as_view(), name="role-detail"),

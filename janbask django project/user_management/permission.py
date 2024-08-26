@@ -9,8 +9,10 @@ class IsAdminPermission(BasePermission):
         user = request.user
         return user.is_authenticated and user.is_admin
 
+
 from rest_framework.permissions import BasePermission
 from user_management.mongo_client import roles_collection
+
 
 class HasReadPermission(BasePermission):
     def has_permission(self, request, view):
@@ -26,7 +28,8 @@ class HasReadPermission(BasePermission):
         if not role:
             return False
 
-        return "read" in role.get("permissions", [])
+        return "READ" in role.get("permissions", [])
+
 
 class HasCreatePermission(BasePermission):
     def has_permission(self, request, view):
@@ -42,7 +45,8 @@ class HasCreatePermission(BasePermission):
         if not role:
             return False
 
-        return "create" in role.get("permissions", [])
+        return "CREATE" in role.get("permissions", [])
+
 
 class HasUpdatePermission(BasePermission):
     def has_permission(self, request, view):
@@ -58,7 +62,8 @@ class HasUpdatePermission(BasePermission):
         if not role:
             return False
 
-        return "update" in role.get("permissions", [])
+        return "UPDATE" in role.get("permissions", [])
+
 
 class HasDeletePermission(BasePermission):
     def has_permission(self, request, view):
@@ -74,11 +79,12 @@ class HasDeletePermission(BasePermission):
         if not role:
             return False
 
-        return "delete" in role.get("permissions", [])
+        return "DELETE" in role.get("permissions", [])
 
 
 from functools import wraps
 from rest_framework.exceptions import PermissionDenied
+
 
 def check_permission(permission):
     def decorator(func):
@@ -94,9 +100,12 @@ def check_permission(permission):
 
             role = roles_collection.find_one({"_id": role_id})
             if not role or permission not in role.get("permissions", []):
-                raise PermissionDenied(f"You don't have permission to '{permission}', Permission is required!")
+                raise PermissionDenied(
+                    f"You don't have permission to '{permission}', Permission is required!"
+                )
 
             return func(self, request, *args, **kwargs)
-        return wrapped
-    return decorator
 
+        return wrapped
+
+    return decorator

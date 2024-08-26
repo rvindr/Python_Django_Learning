@@ -6,9 +6,11 @@ from account.models import UserModel
 from user_management.mongo_client import users_collection, token_collection
 
 
-
 class CustomJWTAuthentication(JWTAuthentication):
     def get_user(self, validated_token):
+        """
+        Retrieve and return the user based on the validated token.
+        """
         user_id = validated_token.get("user_id")
         if not user_id:
             raise InvalidToken("Token contained no recognizable user identification")
@@ -29,6 +31,9 @@ class CustomJWTAuthentication(JWTAuthentication):
         return user
 
     def authenticate(self, request):
+        """
+        Authenticate the user based on the request token.
+        """
         header = self.get_header(request)
         if header is None:
             return None
@@ -45,6 +50,9 @@ class CustomJWTAuthentication(JWTAuthentication):
         return self.get_user(validated_token), validated_token
 
     def logout(self, request):
+        """
+        Log out the user by blacklisting the token.
+        """
         # Get the token from the Authorization header
         raw_token = self.get_raw_token(self.get_header(request))
         if not raw_token:
@@ -59,4 +67,3 @@ class CustomJWTAuthentication(JWTAuthentication):
         request.user = None
 
         return {"message": "Successfully logged out"}
-    

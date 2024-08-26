@@ -15,6 +15,9 @@ from account.serializers import UserSerializer  # UserCreateSerializer
 
 
 class RegistrationView(APIView):
+    """
+    Handle user registration.
+    """
 
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
@@ -32,6 +35,9 @@ class RegistrationView(APIView):
 
 
 class LoginView(APIView):
+    """
+    Handle user login and return authentication tokens.
+    """
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -45,6 +51,10 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
+    """
+    Handle user logout by invalidating JWT tokens.
+    """
+
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -54,8 +64,11 @@ class LogoutView(APIView):
         return Response(logout_res, status=status.HTTP_200_OK)
 
 
-
 class UserChangePassword(APIView):
+    """
+    Allow authenticated users to change their password.
+    """
+
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -85,6 +98,10 @@ class UserChangePassword(APIView):
 
 
 class SendPasswordResetEmailView(APIView):
+    """
+    Handle sending password reset emails.
+    """
+
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -92,7 +109,7 @@ class SendPasswordResetEmailView(APIView):
 
         if serializer.is_valid():
             return Response(
-                {"detail": "Password reset link send. Please check your email"},
+                {"detail": "Password reset link sent. Please check your email"},
                 status=status.HTTP_200_OK,
             )
         return Response(
@@ -101,6 +118,10 @@ class SendPasswordResetEmailView(APIView):
 
 
 class PasswordResetView(APIView):
+    """
+    Handle password reset using a token and UID.
+    """
+
     permission_classes = [AllowAny]
 
     def post(self, request, uid, token):
@@ -111,7 +132,6 @@ class PasswordResetView(APIView):
         if serializer.is_valid():
             response_data = serializer.save()
 
-
             return Response(response_data, status=status.HTTP_200_OK)
 
         return Response(
@@ -120,6 +140,10 @@ class PasswordResetView(APIView):
 
 
 class UserInfoView(APIView):
+    """
+    Retrieve information about the authenticated user.
+    """
+
     authentication_classes = [CustomJWTAuthentication]
     permission_classes = [IsAuthenticated]
 
