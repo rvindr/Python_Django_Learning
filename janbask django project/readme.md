@@ -33,7 +33,7 @@ This project is a Django-based application using MongoDB as the database. It pro
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/your-repo.git
+git clone https://github.com/rvindr/Python_Django_learning.git
 cd your-repo
 ```
 
