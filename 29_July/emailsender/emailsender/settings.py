@@ -119,23 +119,3 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = '' # mail id
 EMAIL_HOST_PASSWORD = '' # password
 
-import os
-
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-        },
-        "file": {
-            "level": "ERROR",
-            "class": "logging.FileHandler",
-            "filename": os.path.join(BASE_DIR, "error.log")
-        }
-    },
-    "root": {
-        "handlers": ["console", "file"],
-        "level": "DEBUG",
-    },
-}
