@@ -237,6 +237,7 @@ class PermissionManagementView(APIView):
         )
 
 
+
 class UserRoleAssignmentView(APIView):
     """
     Assigns a role to a user.

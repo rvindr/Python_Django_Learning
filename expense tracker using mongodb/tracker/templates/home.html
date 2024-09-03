@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Expense Tracker{% endblock title %}
+
+{% block content %}
+<div class="container col-5">
+    <h1>Expense Tracker</h1>
+    <div class="container-ex">
+        <div class="header">
+            <img src="https://i.ibb.co/jfScDTC/budget.png" alt="Expense Tracker" />
+            <div class="balance-container">
+                <h2 class="fw-bold">Your Balance</h2>
+                <h2 id="balance" class="balance fw-bold">${{ total_amount }}</h2>
+            </div>
+        </div>
+        <div class="inc-exp-container">
+            <div>
+                <h6 class="fw-bold">Income</h6>
+                <p id="money-plus" class="money plus">+${{ total_income }}</p>
+            </div>
+            <div>
+                <h6 class="fw-bold">Expenses</h6>
+                <p id="money-minus" class="money minus">-${{ total_expenses }}</p>
+            </div>
+        </div>
+        <h3>History</h3>
+        <ul id="list" class="list">
+            {% for transaction in transactions %}
+                <li class="{% if transaction.amount < 0 %}minus{% else %}plus{% endif %}">
+                    {{ transaction.description }} <span>${{ transaction.amount }}</span>
+                    <!-- Visible delete button -->
+                    <button onclick="document.getElementById('delete-form-{{ transaction.id }}').submit();" class="delete-btn">
+                        <i class="fa fa-times"></i>
+                    </button>
+                    <!-- Hidden delete form -->
+                    <form id="delete-form-{{ transaction.id }}" action="{% url 'delete_expense' transaction.id %}" method="post" style="display:none;">
+                        {% csrf_token %}
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="submit">Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+        <h3>Add new transaction</h3>
+        <form id="form" method="post" action="{% url 'expense_view' %}">
+            {% csrf_token %}
+            <div class="form-control bg-secondary-subtle">
+                <label for="text">Description</label>
+                <input type="text" id="text" name="desc" placeholder="Enter description..." />
+            </div>
+            <div class="form-control bg-secondary-subtle">
+                <label for="amount">
+                    Amount <br />
+                    <small>(-100 = expense, 100 = income)</small>
+                </label>
+                <input type="text" name="amount" id="amount" placeholder="Enter amount..." />
+            </div>
+            <button class="btnex btn-primary" type="submit">Add transaction</button>
+        </form>
+    </div>
+
+    {% if messages %}
+    <script>
+        {% for message in messages %}
+        alert("{{ message }}");
+        {% endfor %}
+    </script>
+    {% endif %}
+</div>
+{% endblock %}

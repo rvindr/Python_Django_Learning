@@ -98,17 +98,29 @@ class RoleSerializer(serializers.Serializer):
 
     id = serializers.CharField(read_only=True, source="_id")
     name = serializers.CharField(max_length=255)
-    permissions = serializers.SerializerMethodField()
+    permissions = serializers.ListField(
+        child=serializers.CharField(), required=False, default=[]
+    )
 
-    def get_permissions(self, role):
+    def to_representation(self, instance):
         """
-        Retrieve permissions associated with the role.
+        Convert the permission IDs to names when serializing the role data.
         """
-        permission_ids = role.get("permissions", [])
+        data = super().to_representation(instance)
+        
+        # Retrieve permission IDs from the data
+        permission_ids = data.get("permissions", [])
+        
+        # Fetch permissions from MongoDB
         permissions = permissions_collection.find({"_id": {"$in": permission_ids}})
-        return [
-            permission.get("name", "Unknown Permission") for permission in permissions
-        ]
+        
+        # Map permission IDs to names
+        permissions_map = {str(permission["_id"]): permission["name"] for permission in permissions}
+        
+        # Replace IDs with names
+        data["permissions"] = [permissions_map.get(permission_id, "Unknown Permission") for permission_id in permission_ids]
+        
+        return data
 
     def create(self, validated_data):
         """
@@ -123,6 +135,7 @@ class RoleSerializer(serializers.Serializer):
 
         permissions = validated_data.get("permissions", [])
         if permissions:
+            # Ensure permission IDs are valid and update the role with them
             valid_permissions = permissions_collection.find(
                 {"_id": {"$in": permissions}}
             ).distinct("_id")
