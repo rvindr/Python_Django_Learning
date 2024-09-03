@@ -1,6 +1,6 @@
 #django-crontab
 
-```markdown
+
 # Django Cron Job Setup Guide
 
 This guide provides step-by-step instructions for setting up a cron job that runs every minute in a Django project using the `django-crontab` package.
