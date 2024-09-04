@@ -1,7 +1,3 @@
-I'll incorporate the settings configuration into the `README.md` file. Here's the updated version:
-
----
-
 # Celery and Redis Integration with Django
 
 This project demonstrates how to integrate Celery with Redis in a Django application to handle asynchronous tasks.
